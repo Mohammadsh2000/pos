@@ -1,4 +1,0 @@
-const kStoreName = 'متجري';
-const kCategories = ['عام', 'مواد غذائية', 'مشروبات', 'إلكترونيات', 'ملابس', 'أدوات منزلية'];
-
-String kCurrencySymbol = 'ر.س';
