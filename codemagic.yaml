@@ -14,6 +14,9 @@ workflows:
       - name: Set up local properties
         script: |
           echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
+      - name: Remove Windows-generated xcconfig
+        script: |
+          rm -f ios/Flutter/Generated.xcconfig
       - name: Get Flutter dependencies
         script: |
           flutter pub get
