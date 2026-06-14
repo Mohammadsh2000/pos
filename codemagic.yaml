@@ -14,6 +14,9 @@ workflows:
       - name: Set up local properties
         script: |
           echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
+      - name: Generate iOS project files if missing
+        script: |
+          [ -d ios/Runner.xcodeproj ] || flutter create --platforms=ios .
       - name: Remove Windows-generated xcconfig
         script: |
           rm -f ios/Flutter/Generated.xcconfig
