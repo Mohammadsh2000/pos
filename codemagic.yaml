@@ -23,6 +23,13 @@ workflows:
       - name: Set minimum iOS version to 15.0
         script: |
           sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = 13\.0;/IPHONEOS_DEPLOYMENT_TARGET = 15.0;/g' ios/Runner.xcodeproj/project.pbxproj || true
+      - name: Configure build settings for unsigned build
+        script: |
+          ruby -e "
+            content = File.read('ios/Runner.xcodeproj/project.pbxproj')
+            content.gsub!(/buildSettings = \{/) { |m| \"\#{m}\n\t\t\t\tDEVELOPMENT_TEAM = \"\";\n\t\t\t\tCODE_SIGN_STYLE = Manual;\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = \"\";\" }
+            File.write('ios/Runner.xcodeproj/project.pbxproj', content)
+          "
       - name: Get Flutter dependencies
         script: |
           flutter pub get
