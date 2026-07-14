@@ -28,6 +28,8 @@
 	<string>1:40318978728:ios:d84c6fe284dd599f92509d</string>
 	<key>DATABASE_URL</key>
 	<string>https://flutter-pos-3eb74-default-rtdb.firebaseio.com</string>
+	<key>CLIENT_ID</key>
+	<string>40318978728-ic3uj6n976k8p8ogqb5rja0g2e561uh0.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.40318978728-ic3uj6n976k8p8ogqb5rja0g2e561uh0</string>
 </dict>

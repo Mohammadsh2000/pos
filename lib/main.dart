@@ -24,10 +24,12 @@ Future<void> bootApp() async {
   await SharedPreferences.getInstance();
   await AppConfig.load();
   await Firebase.initializeApp(options: AppConfig.instance.firebaseOptions);
-  await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.playIntegrity,
-    appleProvider: AppleProvider.deviceCheck,
-  );
+  try {
+    await FirebaseAppCheck.instance.activate(
+      androidProvider: AndroidProvider.playIntegrity,
+      appleProvider: AppleProvider.deviceCheck,
+    );
+  } catch (_) {}
   await FeedbackService.instance.init();
   runApp(const POSApp());
 }

@@ -19,6 +19,7 @@ class AppConfig {
   }
 
   String get serverClientId => _req('GOOGLE_SERVER_CLIENT_ID');
+  String? get iosClientId => _get('FIREBASE_IOS_CLIENT_ID');
 
   FirebaseOptions get firebaseOptions {
     if (kIsWeb) return _webOptions;
