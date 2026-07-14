@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
+import '../main.dart';
 import '../providers/pos_provider.dart';
 import '../utils/excel_helpers.dart';
 import '../screens/login_screen.dart';
@@ -53,7 +54,9 @@ class SettingsSheet extends StatelessWidget {
             color: const Color(0xFF7C3AED),
             onTap: () {
               Navigator.pop(context);
-              showDialog(context: context, useSafeArea: false, builder: (_) => const StatisticsDialog());
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                showDialog(context: navigatorKey.currentContext!, useSafeArea: false, builder: (_) => const StatisticsDialog());
+              });
             },
           ),
           _SettingsTile(
@@ -63,7 +66,9 @@ class SettingsSheet extends StatelessWidget {
             color: const Color(0xFF0891B2),
             onTap: () {
               Navigator.pop(context);
-              showModalBottomSheet(context: context, isScrollControlled: true, builder: (_) => const DataManagementSheet());
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                showModalBottomSheet(context: navigatorKey.currentContext!, isScrollControlled: true, builder: (_) => const DataManagementSheet());
+              });
             },
           ),
           _SettingsTile(
@@ -73,7 +78,9 @@ class SettingsSheet extends StatelessWidget {
             color: const Color(0xFFF97316),
             onTap: () {
               Navigator.pop(context);
-              _showArchiveConfirm(context, p);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _showArchiveConfirm(p);
+              });
             },
           ),
           Padding(
@@ -89,7 +96,9 @@ class SettingsSheet extends StatelessWidget {
             color: const Color(0xFF0F172A),
             onTap: () {
               Navigator.pop(context);
-              _showStoreInfoDialog(context, p);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _showStoreInfoDialog(p);
+              });
             },
           ),
           _SettingsTile(
@@ -99,7 +108,9 @@ class SettingsSheet extends StatelessWidget {
             color: const Color(0xFF16A34A),
             onTap: () {
               Navigator.pop(context);
-              _showCurrencyDialog(context, p);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _showCurrencyDialog(p);
+              });
             },
           ),
           Padding(
@@ -111,14 +122,15 @@ class SettingsSheet extends StatelessWidget {
             title: 'تسجيل الخروج',
             subtitle: 'إنهاء الجلسة الحالية',
             color: const Color(0xFFDC2626),
-            onTap: () => _logout(context),
+            onTap: () => _logout(),
           ),
         ],
       ),
     );
   }
 
-  void _showCurrencyDialog(BuildContext context, POSProvider provider) {
+  void _showCurrencyDialog(POSProvider provider) {
+    final context = navigatorKey.currentContext!;
     final ctrl = TextEditingController(text: provider.currencySymbol);
     showDialog(
       context: context,
@@ -141,12 +153,13 @@ class SettingsSheet extends StatelessWidget {
         ],
       ),
     ).then((v) {
-      if (v == null || v.isEmpty || !context.mounted) return;
+      if (v == null || v.isEmpty || navigatorKey.currentContext == null) return;
       provider.setCurrencySymbol(v as String);
     });
   }
 
-  void _showStoreInfoDialog(BuildContext context, POSProvider provider) {
+  void _showStoreInfoDialog(POSProvider provider) {
+    final context = navigatorKey.currentContext!;
     final nameCtrl = TextEditingController(text: kStoreName);
     final addressCtrl = TextEditingController(text: kStoreAddress);
     final phoneCtrl = TextEditingController(text: kStorePhone);
@@ -174,9 +187,11 @@ class SettingsSheet extends StatelessWidget {
     );
   }
 
-  Future<void> _logout(BuildContext context) async {
+  Future<void> _logout() async {
+    final nav = navigatorKey.currentState;
+    if (nav == null) return;
     final confirmed = await showDialog<bool>(
-      context: context,
+      context: navigatorKey.currentContext!,
       builder: (ctx) => AlertDialog(
         title: const Text('تسجيل الخروج'),
         content: const Text('هل أنت متأكد من تسجيل الخروج؟'),
@@ -191,16 +206,15 @@ class SettingsSheet extends StatelessWidget {
       await prefs.remove('isLoggedIn');
       await prefs.remove('uid');
       await AuthService.instance.signOut();
-      if (context.mounted) {
-        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-          (_) => false,
-        );
-      }
+      nav.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        (_) => false,
+      );
     }
   }
 
-  void _showArchiveConfirm(BuildContext context, POSProvider provider) {
+  void _showArchiveConfirm(POSProvider provider) {
+    final context = navigatorKey.currentContext!;
     final salesCount = provider.sales.length;
     if (salesCount == 0) {
       showTopNotification(context, 'لا توجد عمليات للأرشفة');

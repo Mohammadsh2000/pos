@@ -22,10 +22,9 @@ import AVFoundation
     open url: URL,
     options: [UIApplication.OpenURLOptionsKey: Any] = [:]
   ) -> Bool {
-    if GIDSignIn.sharedInstance.handle(url) {
-      return true
-    }
-    return super.application(app, open: url, options: options)
+    let handled = super.application(app, open: url, options: options)
+    if GIDSignIn.sharedInstance.handle(url) { return true }
+    return handled
   }
 }
 

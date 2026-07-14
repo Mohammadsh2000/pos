@@ -49,8 +49,30 @@ class DriveBackupService {
     if (account == null) {
       account = await AuthService.instance.signInGoogle();
     }
+
+    if (account == null) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      account = AuthService.instance.currentGoogleAccount;
+    }
+    if (account == null) {
+      account = await AuthService.instance.trySilentSignIn();
+    }
+
     if (account == null) return false;
-    return AuthService.instance.requestDriveScope();
+
+    final token = await AuthService.instance.getAccessToken();
+    if (token == null) return false;
+
+    try {
+      final resp = await http.get(
+        Uri.parse('https://www.googleapis.com/drive/v3/about?fields=user'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      if (resp.statusCode == 200) return true;
+      return await AuthService.instance.requestDriveScope();
+    } catch (_) {
+      return await AuthService.instance.requestDriveScope();
+    }
   }
 
   String _fileNameFromPath(String path) {

@@ -9,7 +9,7 @@ class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: ['email', 'profile'],
+    scopes: ['email', 'profile', 'https://www.googleapis.com/auth/drive.file'],
     clientId: defaultTargetPlatform == TargetPlatform.iOS
         ? AppConfig.instance.iosClientId
         : null,
@@ -87,6 +87,20 @@ class AuthService {
   Future<bool> requestDriveScope() async {
     try {
       _lastError = null;
+
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        // On iOS, requestScopes is unreliable (returns false after user approval).
+        // Do a fresh sign-in with all scopes instead.
+        final account = await _googleSignIn.signIn();
+        return account != null;
+      }
+
+      final result = await _googleSignIn.requestScopes(
+        ['https://www.googleapis.com/auth/drive.file'],
+      );
+      if (result) return true;
+
+      await Future.delayed(const Duration(milliseconds: 500));
       return await _googleSignIn.requestScopes(
         ['https://www.googleapis.com/auth/drive.file'],
       );

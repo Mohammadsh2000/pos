@@ -7,9 +7,9 @@ class SceneDelegate: FlutterSceneDelegate {
     _ scene: UIScene,
     openURLContexts URLContexts: Set<UIOpenURLContext>
   ) {
-    if let url = URLContexts.first?.url {
-      if GIDSignIn.sharedInstance.handle(url) { return }
-    }
     super.scene(scene, openURLContexts: URLContexts)
+    if let url = URLContexts.first?.url {
+      GIDSignIn.sharedInstance.handle(url)
+    }
   }
 }
