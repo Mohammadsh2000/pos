@@ -158,10 +158,10 @@ class _ProductsTabState extends State<ProductsTab> {
                   spacing: 8,
                   runSpacing: 4,
                   children: [
-                    _buildSaleTypeChip('الكل', null, tempSaleType, setSheetState),
-                    _buildSaleTypeChip('عدد', 'unit', tempSaleType, setSheetState),
-                    _buildSaleTypeChip('كجم', 'kg', tempSaleType, setSheetState),
-                    _buildSaleTypeChip('كرتونة', 'carton', tempSaleType, setSheetState),
+                    _buildSaleTypeChip('الكل', null, tempSaleType, (v) => setSheetState(() => tempSaleType = v)),
+                    _buildSaleTypeChip('عدد', 'unit', tempSaleType, (v) => setSheetState(() => tempSaleType = v)),
+                    _buildSaleTypeChip('كجم', 'kg', tempSaleType, (v) => setSheetState(() => tempSaleType = v)),
+                    _buildSaleTypeChip('كرتونة', 'carton', tempSaleType, (v) => setSheetState(() => tempSaleType = v)),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -235,12 +235,12 @@ class _ProductsTabState extends State<ProductsTab> {
     );
   }
 
-  Widget _buildSaleTypeChip(String label, String? value, String? current, void Function(VoidCallback) setSheetState) {
+  Widget _buildSaleTypeChip(String label, String? value, String? current, void Function(String?) onSelect) {
     final selected = current == value;
     return ChoiceChip(
       label: Text(label),
       selected: selected,
-      onSelected: (_) => setSheetState(() => current = value),
+      onSelected: (_) => onSelect(value),
     );
   }
 
@@ -464,7 +464,7 @@ class _ProductsTabState extends State<ProductsTab> {
                                 : prod.stock.toStringAsFixed(0));
                         final hasBarcode = prod.barcode.isNotEmpty;
                         final hasPurchasePrice = prod.purchasePrice > 0;
-                        final profit = prod.cartonProfitMargin;
+                        final profit = prod.isCarton ? prod.cartonProfitMargin : (prod.price - prod.purchasePrice);
 
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 8),

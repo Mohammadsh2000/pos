@@ -111,10 +111,7 @@ class SettingsSheet extends StatelessWidget {
             title: 'تسجيل الخروج',
             subtitle: 'إنهاء الجلسة الحالية',
             color: const Color(0xFFDC2626),
-            onTap: () {
-              Navigator.pop(context);
-              _logout(context);
-            },
+            onTap: () => _logout(context),
           ),
         ],
       ),
@@ -189,13 +186,16 @@ class SettingsSheet extends StatelessWidget {
         ],
       ),
     );
-    if (confirmed == true && context.mounted) {
+    if (confirmed == true) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('isLoggedIn');
       await prefs.remove('uid');
       await AuthService.instance.signOut();
       if (context.mounted) {
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const LoginScreen()), (_) => false);
+        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+          (_) => false,
+        );
       }
     }
   }
