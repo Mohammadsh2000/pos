@@ -1,0 +1,101 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code (uncomment if you want to share launch configs)
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio build artifacts
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# ----------------------------------------------------------------------------
+# Firebase & sensitive config (NEVER commit these to a public repo)
+# ----------------------------------------------------------------------------
+# Generated Firebase config — contains API keys, project IDs, app IDs
+/lib/firebase_options.dart
+**/firebase_options.dart
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
+/macos/Runner/GoogleService-Info.plist
+/firebase.json
+/firestore.indexes.json
+/firestore.rules
+/storage.rules
+/database.rules.json
+.google-services/
+
+# Keystores & signing material
+*.jks
+*.keystore
+*.p12
+*.pem
+key.properties
+/android/key.properties
+/ios/Runner/Runner.entitlements
+
+# Environment / secrets
+.env
+.env.local
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+secrets/
+**/secrets/
+
+# Backup / archive folders with broken encoding (legacy clutter)
+احتياطي/
+احتياطي 2/
+
+# Build outputs that should never be tracked
+*.apk
+*.aab
+*.ipa
+*.app
+*.dSYM.zip
+*.dSYM
+
+# Local IDE / OS junk
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Test artifacts
+/test.json
+coverage_badge.svg
